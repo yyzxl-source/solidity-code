@@ -5,6 +5,7 @@ contract MyContract {
     uint256 public myNumber = 10;
 }
 
+// 类型
 contract DataTypes {
     uint256 public myUnit = 100;
     int256 public myInt = -50;
@@ -13,13 +14,13 @@ contract DataTypes {
     address public myAddress = msg.sender; //以太坊地址
 }
 
+// 全局变量与局部变量
 contract Variables {
     uint256 public stateVar = 10;
 
     function myFunction() public  pure {
     }
 }
-
 contract FunctionContract {
     uint public myNumber;
 
@@ -32,7 +33,7 @@ contract FunctionContract {
         return myNumber;
     }
 }
-
+// 修饰符
 contract ConstantsAndModifiers{
 
     address public owner;
@@ -49,4 +50,28 @@ contract ConstantsAndModifiers{
    function setOwner(address _newOwner) public onlyOwner{
     owner=_newOwner;
    }
+}
+// 合约交易
+contract PaymentContract{
+    address public  owner;
+    constructor(){
+        owner=msg.sender;
+    }
+
+    //允许合约接受ETH
+    receive() external payable { 
+    }
+
+    //提取合约余额
+    function withdraw() public {
+        require(msg.sender==owner, "you can't do that");
+        address payable to =payable(owner);//转账地址
+        uint256 amount= address(this).balance; // 转出总额
+        to.transfer(amount);
+    }
+
+    //查询合约余额
+    function getBalance() public view returns (uint){
+        return address(this).balance;//获取地址余额
+    }
 }
